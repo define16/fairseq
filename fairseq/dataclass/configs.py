@@ -5,7 +5,8 @@
 
 import os
 import sys
-from dataclasses import _MISSING_TYPE, dataclass, field
+from dataclasses import dataclass, field
+from dataclasses import MISSING as MISSING_TYPE
 from typing import Any, List, Optional
 
 import torch
@@ -60,7 +61,7 @@ class FairseqDataclass:
                 return getattr(self, attribute_name)
 
         f = self.__dataclass_fields__[attribute_name]
-        if not isinstance(f.default_factory, _MISSING_TYPE):
+        if not isinstance(f.default_factory, MISSING_TYPE.__class__):
             return f.default_factory()
         return f.default
 
@@ -1126,16 +1127,16 @@ class EMAConfig(FairseqDataclass):
 
 @dataclass
 class FairseqConfig(FairseqDataclass):
-    common: CommonConfig = CommonConfig()
-    common_eval: CommonEvalConfig = CommonEvalConfig()
-    distributed_training: DistributedTrainingConfig = DistributedTrainingConfig()
-    dataset: DatasetConfig = DatasetConfig()
-    optimization: OptimizationConfig = OptimizationConfig()
-    checkpoint: CheckpointConfig = CheckpointConfig()
-    bmuf: FairseqBMUFConfig = FairseqBMUFConfig()
-    generation: GenerationConfig = GenerationConfig()
-    eval_lm: EvalLMConfig = EvalLMConfig()
-    interactive: InteractiveConfig = InteractiveConfig()
+    common: CommonConfig = field(default_factory=CommonConfig)
+    common_eval: CommonEvalConfig = field(default_factory=CommonEvalConfig)
+    distributed_training: DistributedTrainingConfig = field(default_factory=DistributedTrainingConfig)
+    dataset: DatasetConfig = field(default_factory=DatasetConfig)
+    optimization: OptimizationConfig = field(default_factory=OptimizationConfig)
+    checkpoint: CheckpointConfig = field(default_factory=CheckpointConfig)
+    bmuf: FairseqBMUFConfig = field(default_factory=FairseqBMUFConfig)
+    generation: GenerationConfig = field(default_factory=GenerationConfig)
+    eval_lm: EvalLMConfig = field(default_factory=EvalLMConfig)
+    interactive: InteractiveConfig = field(default_factory=InteractiveConfig)
     model: Any = MISSING
     task: Any = None
     criterion: Any = None
@@ -1144,4 +1145,4 @@ class FairseqConfig(FairseqDataclass):
     scoring: Any = None
     bpe: Any = None
     tokenizer: Any = None
-    ema: EMAConfig = EMAConfig()
+    ema: EMAConfig = field(default_factory=EMAConfig)
